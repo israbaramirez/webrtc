@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebRTC Render Demo</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel2: #1f2937;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --accent: #22c55e;
+      --danger: #ef4444;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: Arial, sans-serif; background: linear-gradient(180deg,#0b1220,#111827);
+      color: var(--text); min-height: 100vh;
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 24px; }
+    .card {
+      background: rgba(17,24,39,.95); border: 1px solid var(--border); border-radius: 16px; padding: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .top {
+      display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; margin-bottom: 16px;
+    }
+    .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    input {
+      background: #0b1220; color: var(--text); border: 1px solid var(--border); border-radius: 10px;
+      padding: 12px 14px; min-width: 220px;
+    }
+    button {
+      background: var(--panel2); color: var(--text); border: 1px solid var(--border); border-radius: 10px;
+      padding: 12px 14px; cursor: pointer; font-weight: 600;
+    }
+    button:hover { filter: brightness(1.12); }
+    button:disabled { opacity: .5; cursor: not-allowed; }
+    .primary { background: var(--accent); color: #052e16; border: none; }
+    .danger { background: var(--danger); color: white; border: none; }
+    .videos {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    }
+    .video-box {
+      background: #020617; border: 1px solid var(--border); border-radius: 16px; overflow: hidden;
+    }
+    .video-head {
+      display: flex; justify-content: space-between; padding: 10px 12px; color: var(--muted);
+      font-size: 14px; border-bottom: 1px solid var(--border);
+    }
+    video {
+      width: 100%; aspect-ratio: 16 / 9; display: block; background: black; object-fit: cover;
+    }
+    .meta { color: var(--muted); font-size: 14px; line-height: 1.5; }
+    code { background: #0b1220; padding: 2px 6px; border-radius: 6px; }
+    @media (max-width: 800px) {
+      .top, .videos { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>WebRTC Video Call Demo</h1>
+
+    <div class="top">
+      <div class="card">
+        <div class="controls">
+          <input id="roomInput" placeholder="Room name, e.g. ori-mahana" />
+          <button id="joinBtn" class="primary">Join Room</button>
+          <button id="startBtn">Start Call</button>
+          <button id="muteBtn">Mute</button>
+          <button id="cameraBtn">Camera Off</button>
+          <button id="hangupBtn" class="danger">Reset Call</button>
+        </div>
+        <p class="meta" style="margin-top:14px;">
+          Status: <strong id="status">Connecting...</strong><br>
+          My peer ID: <code id="myId">...</code><br>
+          Open the same room name on another device. For different networks, add TURN in <code>public/config.js</code>.
+        </p>
+      </div>
+
+      <div class="card">
+        <strong>Important</strong>
+        <p class="meta">
+          This corrected version has:
+          room targeting, safer ICE handling, candidate queueing, and better 1-to-1 signaling.
+          It still uses only STUN by default. For reliable connections across different networks or mobile data,
+          configure a TURN server in <code>public/config.js</code>.
+        </p>
+      </div>
+    </div>
+
+    <div class="videos">
+      <div class="video-box">
+        <div class="video-head"><span>Local</span><span>Muted locally</span></div>
+        <video id="localVideo" autoplay playsinline muted></video>
+      </div>
+      <div class="video-box">
+        <div class="video-head"><span>Remote</span><span>Incoming stream</span></div>
+        <video id="remoteVideo" autoplay playsinline></video>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
